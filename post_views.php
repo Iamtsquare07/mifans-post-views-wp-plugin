@@ -2,12 +2,13 @@
 /*
 Plugin Name: MiFans Views
 Description: MiFans Views allows you to display the number of views for each post at the top of the post content. Keep your readers informed about the popularity of your posts. Show your readers you are a celebrity to increase trust.
-Version: 1.0.2
+Version: 1.0.3
 Author: Tyavbee Victor
 Author URI: https://www.iamtsquare07.com
-License: MIT
+License: MIT License
 */
 
+// Function to display post views
 // Function to display post views
 function display_post_views($content) {
     if (is_single()) {
@@ -23,33 +24,13 @@ function display_post_views($content) {
             $views += $fake_views;
         }
 
-        $views_text = '<div class="post-views">Viewed: <span id="mifans-post-views">' . format_views($views);
-
-        if ($views <= 1) {
-            $views_text .= ' time';
+        $views_text = generate_views_text($views);
+        
+        if ($content) {
+            $content = $views_text . $content;
         } else {
-            $views_text .= ' times';
+            return $views_text;
         }
-
-        // Add emojis based on view count
-        if ($views >= 1000000) {
-            $views_text .= ' 🎆🎆🎆';
-        } elseif ($views >= 500000) {
-            $views_text .= ' 🎆🎆';
-        } elseif ($views >= 100000) {
-            $views_text .= ' 🎆';
-        } elseif ($views >= 50000) {
-            $views_text .= ' 🔥🔥🔥🔥';
-        } elseif ($views >= 10000) {
-            $views_text .= ' 🔥🔥🔥';
-        } elseif ($views >= 1000) {
-            $views_text .= ' 🔥🔥';
-        } elseif ($views >= 100) {
-            $views_text .= ' 🔥';
-        }
-
-        $views_text .= '👀</span></div>';
-        $content = $views_text . $content;
     }
     return $content;
 }
@@ -69,6 +50,41 @@ function format_views($views) {
     }
 }
 
+
+// Function to generate the views text
+function generate_views_text($views) {
+    $views_text = 
+    '<div style="border:1.5px solid #6b6f80;border-radius:3px 5px 3px 5px;margin-bottom:10px;padding:5px;" class="post-views">Viewed👀: <span style="font-weight: bold;" id="mifans-post-views">' 
+    . format_views($views);
+
+    if ($views <= 1) {
+        $views_text .= ' time';
+    } else {
+        $views_text .= ' times';
+    }
+
+    // Add emojis based on view count
+    if ($views >= 1000000) {
+        $views_text .= ' 🎆🎆🎆';
+    } elseif ($views >= 500000) {
+        $views_text .= ' 🎆🎆';
+    } elseif ($views >= 100000) {
+        $views_text .= ' 🎆';
+    } elseif ($views >= 50000) {
+        $views_text .= ' 🔥🔥🔥🔥';
+    } elseif ($views >= 10000) {
+        $views_text .= ' 🔥🔥🔥';
+    } elseif ($views >= 1000) {
+        $views_text .= ' 🔥🔥';
+    } elseif ($views >= 100) {
+        $views_text .= ' 🔥';
+    }
+
+    $views_text .= '</span></div>';
+
+    return $views_text;
+}
+
 // Function to increment post views on the frontend
 function increment_post_views() {
     if (is_single() && !is_admin()) {
@@ -80,6 +96,31 @@ function increment_post_views() {
 }
 
 add_action('wp_head', 'increment_post_views');
+
+// Function to display post view counts via shortcode
+function post_views_shortcode($atts) {
+    // Get the current post's view count
+    $post_id = get_the_ID();
+    $views = get_post_meta($post_id, 'post_views', true);
+
+    // Check if fake views are enabled
+    $fake_views_enabled = get_option('fake_views_enabled', false);
+
+    // Add fake views if they are enabled
+    if ($fake_views_enabled) {
+        $fake_views = get_post_meta($post_id, 'fake_views', true);
+        $views += $fake_views;
+    }
+    
+    // Generate the views text using the same function
+    $views_text = generate_views_text($views);
+    
+    // Return the views text
+    return $views_text;
+}
+add_shortcode('post_views', 'post_views_shortcode');
+
+
 
 // Add a settings menu to enable fake views
 function mifans_views_settings_menu() {
@@ -99,13 +140,17 @@ function mifans_views_settings_page() {
     <div class="wrap">
         <h2>MiFans Views Settings</h2>
         <form method="post">
+            <p>We promote transparency by displaying your genuine view counts, reflecting your honesty with your readers. 
+                This feature is included for niches where a slight embellishment can be used to genuinely enhance your business, 
+                but we are relying on your integrity to not misuse it.🙏</p>
             <label for="fake_views_enabled">
                 <input type="checkbox" name="fake_views_enabled" id="fake_views_enabled" <?php if ($fake_views_enabled) echo 'checked'; ?> />
                 Enable fake views
             </label>
-            <p>Check this box to enable fake views for your posts.</p>
+            <p>Check this box to enable fake views for your posts. (Fake views will appear when editing post)</p>
             <input type="hidden" name="mifans_views_settings_submit" value="1">
             <p><input type="submit" class="button button-primary" value="Save Changes"></p>
+            <p>Post views are displayed at the top of each post, If you wish to show the post views anywhere else, use this shortcode <b>[post_views]<b></p>
         </form>
     </div>
     <?php
