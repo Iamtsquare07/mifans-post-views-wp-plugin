@@ -2,9 +2,10 @@
 /*
 Plugin Name: MiFans Views
 Description: MiFans Views allows you to display the number of views for each post at the top of the post content. Keep your readers informed about the popularity of your posts. Show your readers you are a celebrity to increase trust.
-Version: 1.0.1
+Version: 1.0.2
 Author: Tyavbee Victor
 Author URI: https://www.iamtsquare07.com
+License: MIT
 */
 
 // Function to display post views
@@ -22,7 +23,7 @@ function display_post_views($content) {
             $views += $fake_views;
         }
 
-        $views_text = '<div class="post-views">Viewed: <span id="mifans-post-views">' . $views;
+        $views_text = '<div class="post-views">Viewed: <span id="mifans-post-views">' . format_views($views);
 
         if ($views <= 1) {
             $views_text .= ' time';
@@ -54,6 +55,19 @@ function display_post_views($content) {
 }
 
 add_filter('the_content', 'display_post_views');
+
+// Helper function to format views with abbreviations
+function format_views($views) {
+    if ($views >= 1000000000) {
+        return round($views / 1000000000, 1) . 'B';
+    } elseif ($views >= 1000000) {
+        return round($views / 1000000, 1) . 'M';
+    } elseif ($views >= 1000) {
+        return round($views / 1000, 1) . 'K';
+    } else {
+        return $views;
+    }
+}
 
 // Function to increment post views on the frontend
 function increment_post_views() {
