@@ -6,6 +6,7 @@ Version: 1.0.3
 Author: Tyavbee Victor
 Author URI: https://www.iamtsquare07.com
 License: MIT License
+Text Domain: mifans-views
 */
 
 // Function to display post views
@@ -140,14 +141,17 @@ function mifans_views_settings_page() {
     <div class="wrap">
         <h2>MiFans Views Settings</h2>
         <form method="post">
-            <p>We promote transparency by displaying your genuine view counts, reflecting your honesty with your readers. 
-                This feature is included for niches where a slight embellishment can be used to genuinely enhance your business, 
-                but we are relying on your integrity to not misuse it.🙏</p>
             <label for="fake_views_enabled">
                 <input type="checkbox" name="fake_views_enabled" id="fake_views_enabled" <?php if ($fake_views_enabled) echo 'checked'; ?> />
                 Enable fake views
             </label>
-            <p>Check this box to enable fake views for your posts. (Fake views will appear when editing post)</p>
+            <p>
+                Check this box to enable fake views for your posts. (Fake views will appear when editing post)<br>
+                We promote transparency by displaying your genuine view counts, reflecting your honesty with your readers. 
+                This feature is included for niches where a slight embellishment can be used to genuinely enhance your business, 
+                but we are relying on your integrity to not misuse it.🙏
+            </p>
+
             <input type="hidden" name="mifans_views_settings_submit" value="1">
             <p><input type="submit" class="button button-primary" value="Save Changes"></p>
             <p>Post views are displayed at the top of each post, If you wish to show the post views anywhere else, use this shortcode <b>[post_views]<b></p>
