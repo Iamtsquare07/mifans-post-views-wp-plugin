@@ -5,11 +5,10 @@ Description: MiFans Views allows you to display the number of views for each pos
 Version: 1.0.3
 Author: Tyavbee Victor
 Author URI: https://www.iamtsquare07.com
-License: MIT License
-Text Domain: mifans-views
+License: GPL V3 or later
+Text Domain: miFans-views-post-views-for-marketers
 */
 
-// Function to display post views
 // Function to display post views
 function display_post_views($content) {
     if (is_single()) {
@@ -55,7 +54,7 @@ function format_views($views) {
 // Function to generate the views text
 function generate_views_text($views) {
     $views_text = 
-    '<div style="border:1.5px solid #6b6f80;border-radius:3px 5px 3px 5px;margin-bottom:10px;padding:5px;" class="post-views">Viewed👀: <span style="font-weight: bold;" id="mifans-post-views">' 
+    '<div style="border:1.5px solid #6b6f80;border-radius:3px 5px 3px 5px;margin-bottom:10px;padding:5px;width:fit-content;" class="post-views">Viewed👀: <span style="font-weight: bold;" id="mifans-post-views">' 
     . format_views($views);
 
     if ($views <= 1) {
