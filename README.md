@@ -5,4 +5,4 @@
 - Version: 1.0.3
 - Author: Tyavbee Victor
 - Author URI: https://www.iamtsquare07.com
-- License: MIT
+- License: MIT License
